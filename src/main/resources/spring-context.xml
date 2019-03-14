@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<!-- 配置扫描注解 -->
+	<context:component-scan base-package="com.kaicom"/>
+	<!-- 加载数据源配置文件这个笔者不知为什么不能加载数据配置文件 -->
+	<!-- <context:property-placeholder location="classpath:jdbc.properties"/> -->
+	<!-- 引入配置文件，这个有效 -->    
+    <bean id="propertyConfigurer"    
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">    
+        <property name="locations">
+        	<list>
+        		<value>classpath:jdbc.properties</value>
+        		<value>classpath:log4j.properties</value>
+        	</list>
+        </property>   
+    </bean>
+	<!-- 配置数据源连接池 -->
+	<bean id = "dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${driver}"></property>
+		<property name="jdbcUrl" value="${url}"></property>
+		<property name="user" value="${username}"></property>
+		<property name="password" value="${password}"></property>
+	</bean>
+	
+	<!-- 配置注解事物 -->
+	<bean id = "transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- 整合mybatis -->
+	<!-- 创建sqlSessionFactory -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:SqlMapperConfig.xml"></property>
+		<property name="mapperLocations" value="classpath:/com/kaicom/mapper/*.xml"></property>
+	</bean>
+	
+	<!-- 配置扫描dao层接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.kaicom.dao"></property>
+	</bean>
+	
+	<!-- 此时sm整合完毕 -->
+</beans>

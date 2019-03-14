@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kaicom.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="user" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="login" resultMap="BaseResultMap">
+  	select * from user 
+  	<where>
+  		<if test="userName != null and userName != ''">
+  			and username = #{userName}
+  		</if>
+  		<if test="password != null and password != ''">
+  			and sex = #{password}
+  		</if>
+  	</where>
+  </select>
+  
+  <update id="testTransaction1">
+  	update user set username = 'zhansgan' where id = 1
+  </update>
+  
+  <update id="testTransaction2">
+  	update user set username = 'lisi' where id = 10
+  </update>
+</mapper>
