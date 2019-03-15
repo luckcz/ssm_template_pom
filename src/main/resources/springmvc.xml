@@ -18,6 +18,22 @@
 			</array>
 		</property>
 	</bean>
+	<!-- 配置文件上传 -->
+	 <!-- 注意：这里id必须填写：multipartResolver -->
+	<bean id = "multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 最大上传文件大小 -->
+        <property name="maxUploadSize" value="8388608" />
+        <!--设置编码-->
+        <property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
+	
+	<!-- 配置拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.kaicom.intercepter.LoginIntercepter"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	<!-- 配置试图解析器 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/"></property>
