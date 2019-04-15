@@ -57,4 +57,9 @@ public class LoginController {
 		file.transferTo(new File("D:/file/"+fileName+"."+extension));
 		return "图片上传成功：<a href='"+"http://localhost:9999/pic/"+fileName+"."+extension+"'>点击查看图片</a>";
 	}
+	@RequestMapping("/testGitHub")
+	@ResponseBody
+	public String testGithub(){
+		return "testGitHub";
+	}
 }
